@@ -36,3 +36,5 @@ next-env.d.ts
 
 # pocketbase
 pocketbase
+/pb_migrations
+/pb_data/storage
