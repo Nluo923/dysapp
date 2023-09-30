@@ -1,0 +1,29 @@
+2023/09/04 18:23:35 Server started at http://127.0.0.1:8090
+├─ REST API: http://127.0.0.1:8090/api/
+└─ Admin UI: http://127.0.0.1:8090/_/
+2023/09/04 18:24:41 Server started at http://127.0.0.1:8090
+├─ REST API: http://127.0.0.1:8090/api/
+└─ Admin UI: http://127.0.0.1:8090/_/
+
+> dysapp@0.1.0 dev
+> next dev --turbo
+
+(node:6449) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+>>> TURBOPACK (beta)
+
+Thank you for trying Next.js v13 with Turbopack! As a reminder,
+Turbopack is currently in beta and not yet ready for production.
+We appreciate your ongoing support as we work to make it ready
+for everyone.
+
+Learn more about Next.js v13 and Turbopack: https://nextjs.link/with-turbopack
+Please direct feedback to: https://nextjs.link/turbopack-feedback
+
+[32mready[39m - started server on [::]:3000, url: http://localhost:3000
+2023/09/12 23:10:14 Server started at http://127.0.0.1:8090
+├─ REST API: http://127.0.0.1:8090/api/
+└─ Admin UI: http://127.0.0.1:8090/_/
+2023/09/14 22:54:31 Server started at http://127.0.0.1:8090
+├─ REST API: http://127.0.0.1:8090/api/
+└─ Admin UI: http://127.0.0.1:8090/_/
