@@ -12,7 +12,7 @@ export default function FilePage() {
     <>
       <FileUpload></FileUpload>
       <Separator></Separator>
-      <Link href="./file/d3soxe2k9h5kp91">go</Link>
+      <Link href="./file/d3soxe2k9h5kp91">Example: computers (Wikipedia)</Link>
     </>
   );
 }

@@ -1,11 +1,17 @@
-import fs from "fs";
-import util from "util";
-const execFile = require("child_process").execFile;
-import natural from "natural";
+export const dynamic = "auto",
+  dynamicParams = true,
+  revalidate = 60,
+  fetchCache = "auto";
 
-import { GetFileURL, GetFileRaw } from "@/app/file/[id]/page";
+const { promisify } = require("util");
+const exec = promisify(require("child_process").exec);
+import natural from "natural";
+import fs from "fs";
+
+import { GetFileURL, GetFileRaw } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import PocketBase from "pocketbase";
+import { quote } from "@/lib/utils";
 
 const pb = new PocketBase("http://127.0.0.1:8090");
 
@@ -13,33 +19,24 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
-  if (!id)
+  if (!id) {
     return NextResponse.json({ message: `file doesn't exist`, success: false });
+  }
+
+  fs.mkdir(`app/public/${id}`, { recursive: true }, (err) => {
+    console.log(err);
+  });
 
   const f = await pb.collection("files").getOne(id);
-  const name = `app/public/${f.title}.mp3`;
+  const path = `app/public/${id}/full.mp3`;
 
   const fileURL = GetFileURL(id);
   const text = (await GetFileRaw((await fileURL).href)).toString();
 
-  const res = execFile(
-    "gtts-cli",
-    [`${text}`, "--output", `${name}`],
-    (error: any, stdout: any, stderr: any) => {
-      if (error) {
-        console.log(`error: ${error.message}`);
-        return NextResponse.json({ message: error.message, success: false });
-      }
-      if (stderr) {
-        return NextResponse.json({
-          message: `stderr: ${stderr}`,
-          success: false,
-        });
-      }
+  const res = await exec(`gtts-cli ${quote(text)} --output ${path}`);
 
-      return NextResponse.json({ message: `stdout: ${stdout}`, success: true });
-    }
-  );
+  if (res.error)
+    return NextResponse.json({ message: `${res.error}`, success: false });
 
-  return res;
+  return NextResponse.json({ message: `${res.stdout}`, success: true });
 }

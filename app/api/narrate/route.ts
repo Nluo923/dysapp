@@ -1,15 +1,14 @@
 export const dynamic = "auto",
   dynamicParams = true,
   revalidate = 0,
-  fetchCache = "auto";
+  fetchCache = "force-no-store";
 
-import fs from "fs";
 const { promisify } = require("util");
 const exec = promisify(require("child_process").exec);
 
-import { GetFileURL, GetFileRaw } from "@/app/file/[id]/page";
 import { NextResponse } from "next/server";
 import PocketBase from "pocketbase";
+import { quote } from "@/lib/utils";
 
 const pb = new PocketBase("http://127.0.0.1:8090");
 
@@ -26,20 +25,17 @@ export async function GET(request: Request) {
   //console.log(text);
   const run = `gtts-cli '${text}'`;
 
-  const res = await exec(run, (error: any, stdout: any, stderr: any) => {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return NextResponse.json({ message: error.message, success: false });
-    }
-    if (stderr) {
-      return NextResponse.json({
-        message: `stderr: ${stderr}`,
-        success: false,
-      });
-    }
+  let res;
 
-    return NextResponse.json({ message: `out: ${stdout}`, success: true });
+  try {
+    res = await exec(`gtts-cli ${quote(text)}`);
+  } catch (error) {
+    return NextResponse.json({ message: `${error}`, success: false });
+  }
+
+  return NextResponse.json({
+    message: "it worked",
+    audio: `${res}`,
+    success: true,
   });
-
-  return res;
 }
