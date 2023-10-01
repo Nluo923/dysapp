@@ -35,7 +35,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     message: "it worked",
-    audio: `${res}`,
+    audio: `${res.stdout}`,
     success: true,
   });
 }
