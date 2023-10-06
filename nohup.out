@@ -27,3 +27,6 @@ Please direct feedback to: https://nextjs.link/turbopack-feedback
 2023/09/14 22:54:31 Server started at http://127.0.0.1:8090
 ├─ REST API: http://127.0.0.1:8090/api/
 └─ Admin UI: http://127.0.0.1:8090/_/
+2023/10/04 20:23:26 Server started at http://127.0.0.1:8090
+├─ REST API: http://127.0.0.1:8090/api/
+└─ Admin UI: http://127.0.0.1:8090/_/

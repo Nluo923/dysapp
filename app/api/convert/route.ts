@@ -23,12 +23,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ message: `file doesn't exist`, success: false });
   }
 
-  fs.mkdir(`app/public/${id}`, { recursive: true }, (err) => {
+  fs.mkdir(`public/${id}`, { recursive: true }, (err) => {
     console.log(err);
   });
 
   const f = await pb.collection("files").getOne(id);
-  const path = `app/public/${id}/full.mp3`;
+  const path = `public/${id}/full.mp3`;
 
   const fileURL = GetFileURL(id);
   const text = (await GetFileRaw((await fileURL).href)).toString();
@@ -38,5 +38,5 @@ export async function GET(request: Request) {
   if (res.error)
     return NextResponse.json({ message: `${res.error}`, success: false });
 
-  return NextResponse.json({ message: `${res.stdout}`, success: true });
+  return NextResponse.json({ success: true });
 }

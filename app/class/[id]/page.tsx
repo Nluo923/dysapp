@@ -72,7 +72,7 @@ export default async function ClassPage({
 function File({ f }: any) {
   const { id, title, file, created } = f || {};
   return (
-    <Link href={`/files/${id}`}>
+    <Link href={`/file/${id}`}>
       <div className="max-w-sm rounded overflow-hidden shadow-lg">
         <img className="w-full">{}</img>
         <div className="px-6 py-4">

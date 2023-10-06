@@ -38,7 +38,7 @@ export function FileUpload({ ...props }) {
     isDragActive,
   } = useDropzone({
     accept: {
-      "text/plain": [".txt"],
+      "text/plain": [".txt", ".md"],
       //"application/pdf": [".pdf"],
       "text/html": [".html", ".htm"],
     },
@@ -148,7 +148,7 @@ export function FileUpload({ ...props }) {
                 isDragActive ? "text-muted" : "text-muted-foreground"
               } font-bold text-xs`}
             >
-              <em>Only .txt, .html files accepted</em>
+              <em>Only .txt, .html, .md files accepted</em>
             </p>
           </div>
         </div>
