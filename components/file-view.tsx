@@ -6,23 +6,25 @@ export const dynamic = {
 import { marked } from "marked";
 import { sanitize } from "isomorphic-dompurify";
 import natural from "natural";
+import React from "react";
+import { Reader } from "@/components/reader";
 
-const tokenizer = {
-  paragraph(src: string) {
-    console.log(src);
-    const match = src.match("\b[^.!?]+[.!?]+");
-    if (match) {
-      console.log(match[0] + " " + match[1]);
-      return {
-        type: "paragraph",
-        raw: match[0],
-        text: match[1],
-      };
-    }
+// const tokenizer = {
+//   paragraph(src: string) {
+//     console.log(src);
+//     const match = src.match("\b[^.!?]+[.!?]+");
+//     if (match) {
+//       console.log(match[0] + " " + match[1]);
+//       return {
+//         type: "paragraph",
+//         raw: match[0],
+//         text: match[1],
+//       };
+//     }
 
-    return false;
-  },
-};
+//     return false;
+//   },
+// };
 
 const renderer = {
   paragraph(text: string) {
@@ -31,17 +33,26 @@ const renderer = {
 
     return `<p>${res
       .map((s: string) => {
-        console.log(s);
         return `<span>${s}</span>`;
       })
       .join(" ")}</p>`;
   },
+  listitem(text: string, task: boolean, checked: boolean) {
+    const tk = new natural.SentenceTokenizer();
+    const res = tk.tokenize(text);
+
+    return `<li>${res
+      .map((s: string) => {
+        return `<span>${s}</span>`;
+      })
+      .join(" ")}</li>`;
+  },
+  heading(text: string, level: number) {
+    return `<h${level}><span>${text}</span></h${level}>`;
+  },
 };
 
 marked.use({
-  //@ts-ignore
-  // tokenizer,
-  //@ts-ignore
   renderer,
   hooks: {
     preprocess(markdown) {
@@ -58,10 +69,12 @@ marked.use({
 export function FileView({ text }: { text: string }) {
   const html = marked.parse(text);
 
+  return <Reader html={html}></Reader>;
+
   return (
     <article
-      dangerouslySetInnerHTML={{ __html: html }}
       className="prose dark:prose-invert "
+      dangerouslySetInnerHTML={{ __html: html }}
     ></article>
   );
 }

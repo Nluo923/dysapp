@@ -33,6 +33,7 @@
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "framer-motion": "^10.16.4",
+    "html-to-react": "^1.7.0",
     "isomorphic-dompurify": "^1.9.0",
     "marked": "^9.0.3",
     "marked-react": "^2.0.0",
