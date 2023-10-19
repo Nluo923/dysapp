@@ -11,7 +11,6 @@ export default function FilePage() {
   return (
     <>
       <FileUpload></FileUpload>
-      <Separator></Separator>
       <FileList></FileList>
     </>
   );
