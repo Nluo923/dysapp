@@ -1,13 +1,15 @@
-export const dynamic = {
-  revalidate: 0,
-  cache: "force-no-store",
-};
+// export const dynamic = {
+//   revalidate: 0,
+//   cache: "force-no-store",
+// };
 
 import { marked } from "marked";
 import { sanitize } from "isomorphic-dompurify";
-import natural from "natural";
+import { SentenceTokenizer } from "natural/lib/natural/tokenizers/index.js";
 import React from "react";
-import { Reader } from "@/components/reader";
+import dynamic from "next/dynamic";
+// import Reader from "@/components/reader";
+const Reader = dynamic(() => import("./reader"), { ssr: false });
 
 // const tokenizer = {
 //   paragraph(src: string) {
@@ -28,7 +30,7 @@ import { Reader } from "@/components/reader";
 
 const renderer = {
   paragraph(text: string) {
-    const tk = new natural.SentenceTokenizer();
+    const tk = new SentenceTokenizer();
     const res = tk.tokenize(text);
 
     return `<p>${res
@@ -38,7 +40,7 @@ const renderer = {
       .join(" ")}</p>`;
   },
   listitem(text: string, task: boolean, checked: boolean) {
-    const tk = new natural.SentenceTokenizer();
+    const tk = new SentenceTokenizer();
     const res = tk.tokenize(text);
 
     return `<li>${res
@@ -49,6 +51,10 @@ const renderer = {
   },
   heading(text: string, level: number) {
     return `<h${level}><span>${text}</span></h${level}>`;
+  },
+  link(href: string) {
+    // console.log(`https://${href}`);
+    return `<a href="https://${href}">${href}</a>`;
   },
 };
 
@@ -66,10 +72,22 @@ marked.use({
   breaks: false,
 });
 
-export function FileView({ text }: { text: string }) {
+export function FileView({
+  text,
+  children,
+}: {
+  text: string;
+  title: string;
+  children: React.ReactElement;
+}) {
   const html = marked.parse(text);
 
-  return <Reader html={html}></Reader>;
+  return (
+    <>
+      <div className="top-0 sticky">{children}</div>
+      <Reader html={html}></Reader>
+    </>
+  );
 
   return (
     <article

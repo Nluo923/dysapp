@@ -50,6 +50,9 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        icon: {
+          DEFAULT: "rgb(173, 240, 221)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -77,5 +80,12 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography"),
+    require("tailwind-scrollbar"),
+  ],
+  variants: {
+    scrollbar: ["rounded"],
+  },
 };
