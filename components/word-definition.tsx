@@ -20,9 +20,9 @@ import {
 export function WordDefinition({ ...props }) {
   return (
     <>
-      <div className="space-y-2 px-4">
+      <div className="space-y-2 px-4 w-full">
         <h1 className="text-xl font-bold">{props.word}</h1>
-        <WordContext word={props.word}></WordContext>
+        <WordContext word={props.word} key={props.word}></WordContext>
       </div>
     </>
   );
@@ -119,7 +119,7 @@ function WordContext({ word }: { word: string }) {
             }
           }
 
-          console.log(phonetics);
+          // console.log(phonetics);
 
           const stripped = phonetics
             .replaceAll(/\//g, "")
@@ -131,7 +131,7 @@ function WordContext({ word }: { word: string }) {
             .replaceAll("m̩", "m")
             .replaceAll(".", "");
 
-          console.log(stripped);
+          // console.log(stripped);
 
           const phonemes = (toArpabet(stripped, 2) ?? stripped)
             .replaceAll(/[0-9]/g, "")
@@ -141,12 +141,12 @@ function WordContext({ word }: { word: string }) {
             phonemes[i] =
               phonemeVowelConverter.get(phonemes[i]) ??
               phonemes[i].toLocaleLowerCase();
-          console.log(phonemes);
+          // console.log(phonemes);
           setPhonetics(phonetics);
           setPhonemes(phonemes);
         })
         .then(() => {
-          console.log(word + " passed");
+          // console.log(word + " passed");
           // setLoaded(true);
         })
         .catch((error) => {
@@ -158,9 +158,9 @@ function WordContext({ word }: { word: string }) {
 
   const reset = (word: string) => {
     // setPhonetics("");
-    setMeanings([]);
+    // setMeanings([]);
     // setPhonemes([]);
-    setAudioURL("");
+    // setAudioURL("");
     // setErrorMsg("");
     setLoaded(false);
   };
@@ -177,7 +177,7 @@ function WordContext({ word }: { word: string }) {
     setLoaded(true);
   }, [phonetics, phonemes]);
 
-  if (loaded && word.trim()) {
+  if (word.trim() && (meanings || phonetics || audioURL)) {
     let audio = <></>;
     if (audioURL.trim()) audio = <audio controls src={audioURL}></audio>;
     return (

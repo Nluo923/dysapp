@@ -26,23 +26,23 @@ export function ShareableTitle({ text }: { text: string }) {
     <div
       className={`${
         shrink ? "justify-end" : "justify-center"
-      } hover:text-emerald-400 transition ease-in-out delay-150 flex items-center space-x-4 mb-4 min-h-[3.5rem]`}
-      onClick={() => {
-        setBroken(true);
-        navigator.clipboard.writeText(document.URL);
-        toast({
-          title: "Link Copied",
-          description: "Share this text!",
-        });
-      }}
-      onMouseLeave={() => {
-        setBroken(false);
-      }}
+      }  flex items-center space-x-4 mb-4 min-h-[3.5rem]`}
     >
       <h1
         className={`${
           shrink ? "text-lg" : "text-4xl"
-        } top-0 sticky font-bold inline-block vertical-align `}
+        } top-0 sticky font-bold inline-block vertical-align select-none hover:text-emerald-400 transition ease-in-out delay-150`}
+        onClick={() => {
+          setBroken(true);
+          navigator.clipboard.writeText(document.URL);
+          toast({
+            title: "Link Copied",
+            description: "Share this text!",
+          });
+        }}
+        onMouseLeave={() => {
+          setBroken(false);
+        }}
       >
         {text}
       </h1>

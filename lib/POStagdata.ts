@@ -1,0 +1,91 @@
+export const tagsCaption = new Map([
+  ["CC", "Coordinating Conjunction"],
+  ["CD", "Cardinal number"],
+  ["DT", "Determiner"],
+  ["EX", "Existential there"],
+  ["FW", "Foreign Word"],
+  ["IN", "Preposition"],
+  ["JJ", "Adjective"],
+  ["JJR", "Adjective (comparative)"],
+  ["JJS", "Adjective (superlative)"],
+  ["LS", "List item marker"],
+  ["MD", "Modal"],
+  ["N", "Noun?"],
+  ["NN", "Noun"],
+  ["NNP", "Proper noun"],
+  ["NNPS", "Proper noun (plural)"],
+  ["NNS", "Noun (plural)"],
+  ["POS", "Possessive ending"],
+  ["PDT", "Predeterminer"],
+  ["PRP$", "Possessive pronoun"],
+  ["PRP", "Personal pronoun"],
+  ["RB", "Adverb"],
+  ["RBR", "Adverb (comparative)"],
+  ["RBS", "Adverb (superlative)"],
+  ["RP", "Particle"],
+  ["SYM", "Symbol"],
+  ["UH", "Interjection"],
+  ["VB", "Verb"],
+  ["VBD", "Verb (past tense)"],
+  ["VBG", "verb (gerund)"],
+  ["VBN", "verb (past part)"],
+  ["VBP", "Verb (present)"],
+  ["VBZ", "Verb (present)"],
+  ["WDT", "Wh-determiner"],
+  ["WP", "Wh pronoun"],
+  ["WP$", "Possessive-Wh"],
+  ["WRB", "Wh-adverb"],
+  ["URL", "Link"],
+]);
+
+/*
+linking = yellow
+object noun = teal
+verb = hot pink
+adj = purple
+subject = light pink
+*/
+const y = "yellow-300";
+const n = "teal-500";
+const v = "pink-600";
+const a = "indigo-700";
+const s = "pink-200";
+export const tagsStyle = new Map([
+  ["CC", y],
+  ["CD", n],
+  ["DT", y],
+  ["EX", y],
+  ["FW", n],
+  ["IN", a],
+  ["JJ", a],
+  ["JJR", a],
+  ["JJS", a],
+  ["LS", a],
+  ["MD", v],
+  ["N", n],
+  ["NN", n],
+  ["NNP", s],
+  ["NNPS", s],
+  ["NNS", n],
+  ["POS", s],
+  ["PDT", a],
+  ["PRP$", s],
+  ["PRP", s],
+  ["RB", a],
+  ["RBR", a],
+  ["RBS", a],
+  ["RP", v],
+  ["SYM", n],
+  ["UH", y],
+  ["VB", v],
+  ["VBD", v],
+  ["VBG", v],
+  ["VBN", v],
+  ["VBP", v],
+  ["VBZ", v],
+  ["WDT", y],
+  ["WP", s],
+  ["WP$", s],
+  ["WRB", a],
+  ["URL", s],
+]);
