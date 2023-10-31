@@ -15,8 +15,25 @@ import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { UserProfile } from "@/components/user-profile";
+import Pocketbase, { RecordModel } from "pocketbase";
+const pb = new Pocketbase("http://127.0.0.1:8090");
 
 export function Navbar({ ...props }) {
+  const [recentFiles, setRecentFiles] = React.useState<RecordModel[]>([]);
+
+  React.useEffect(() => {
+    function fetchFiles() {
+      const fileList = pb.collection("files").getList(1, 3, {
+        sort: "-created",
+      });
+
+      fileList
+        .then((r) => setRecentFiles(r.items))
+        .catch((e) => console.log(e));
+    }
+    fetchFiles();
+  }, []);
+
   return (
     <nav className="flex h-16 items-center px-4">
       <NavigationMenu className={cn("mx-6")} {...props}>
@@ -36,7 +53,7 @@ export function Navbar({ ...props }) {
                 <li className="row-span-4 flex-grow-0">
                   <NavigationMenuLink asChild>
                     <a
-                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted dark:from-indigo-500 dark:to-violet-950 p-6 no-underline outline-none focus:shadow-md"
+                      className="min-h-[256px] flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted dark:from-indigo-500 dark:to-violet-950 p-6 no-underline outline-none focus:shadow-md"
                       href="/class"
                     >
                       <div className="mb-2 mt-4 text-lg font-medium">
@@ -50,14 +67,10 @@ export function Navbar({ ...props }) {
                 </li>
                 <ul className="">
                   <ListItem href="/class/c60s1t92e9zz1ql">
-                    PLACEHOLDER CLASS 1
+                    Nicholas&#39; Class
                   </ListItem>
-                  <ListItem href="/class/c60s1t92e9zz1ql">
-                    PLACEHOLDER CLASS 2
-                  </ListItem>
-                  <ListItem href="/class/c60s1t92e9zz1ql">
-                    PLACEHOLDER CLASS 3
-                  </ListItem>
+                  <ListItem href="/class/c60s1t92e9zz1ql">...</ListItem>
+                  <ListItem href="/class/c60s1t92e9zz1ql">...</ListItem>
                   <Separator className="my-2 px"></Separator>
                   <ListItem className="col-span-1 font-bold">
                     New Class
@@ -73,7 +86,7 @@ export function Navbar({ ...props }) {
                 <li className="row-span-4 flex-grow-0">
                   <NavigationMenuLink asChild>
                     <a
-                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted dark:from-emerald-400 dark:to-teal-800 p-6 no-underline outline-none focus:shadow-md"
+                      className="min-h-[256px] flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted dark:from-emerald-400 dark:to-teal-800 p-6 no-underline outline-none focus:shadow-md"
                       href="/file"
                     >
                       <div className="mb-2 mt-4 text-lg font-medium">
@@ -86,9 +99,16 @@ export function Navbar({ ...props }) {
                   </NavigationMenuLink>
                 </li>
                 <ul className="">
-                  <ListItem href="/file/1">PLACEHOLDER FILE 1</ListItem>
-                  <ListItem href="/file/1">PLACEHOLDER FILE 2</ListItem>
-                  <ListItem href="/file/1">PLACEHOLDER FILE 3</ListItem>
+                  {recentFiles?.map((f, i, a) => {
+                    return (
+                      <ListItem href={`/file/${f.id}`} key={i}>
+                        {f.title}
+                      </ListItem>
+                    );
+                  })}
+                  {/* <ListItem href="/file/1">PLACEHOLDER FILE 1</ListItem>
+                  <ListItem href="/file/1"></ListItem>
+                  <ListItem href="/file/1"></ListItem> */}
                   <Separator className="my-2 px"></Separator>
                   <ListItem className="col-span-1 font-bold">
                     Upload File

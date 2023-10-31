@@ -28,8 +28,7 @@ export function WordDefinition({ ...props }) {
   );
 }
 
-function WordSkeleton({ word }: { word: string }) {
-  if (!word.trim()) return false;
+function WordSkeleton() {
   return (
     <>
       <Skeleton className="h-4 w-[4em] animate-pulse"></Skeleton>
@@ -103,19 +102,25 @@ function WordContext({ word }: { word: string }) {
           let phonetics;
 
           setMeanings(res[0].meanings);
-          phonetics = res[0].phonetic ?? res[0].phonetics;
+          phonetics =
+            res[0].phonetic ??
+            res[0].phonetics ??
+            "Couldn't find a pronunciation";
           setPhonemes(phonetics ? phonetics.split() : "");
 
-          phonetics = res[0].phonetics[0].text;
-          for (let i = 0; res[0].phonetics[i]; i++) {
-            if (res[0].phonetics[i].audio == "") continue;
+          if (res[0].phonetics && res[0].phonetics.length != 0) {
+            phonetics = res[0]?.phonetics[0].text;
+            for (let i = 0; res[0].phonetics[i]; i++) {
+              if (!res[0].phonetics[i].audio || res[0].phonetics[i].audio == "")
+                continue;
 
-            phonetics = res[0].phonetics[i].text;
-            setPhonemes(phonetics.split(" "));
+              phonetics = res[0].phonetics[i].text;
+              setPhonemes(phonetics.split(" "));
 
-            setAudioURL(res[0].phonetics[i].audio);
-            if ((res[0].phonetics[i].audio as string).endsWith("-us.mp3")) {
-              break;
+              setAudioURL(res[0].phonetics[i].audio);
+              if ((res[0].phonetics[i].audio as string).endsWith("-us.mp3")) {
+                break;
+              }
             }
           }
 
@@ -150,10 +155,9 @@ function WordContext({ word }: { word: string }) {
           // setLoaded(true);
         })
         .catch((error) => {
-          setPhonemes([word]);
           console.log(error);
         }),
-    [word]
+    []
   );
 
   const reset = (word: string) => {
@@ -184,9 +188,13 @@ function WordContext({ word }: { word: string }) {
       <>
         <p className="text-xs text-muted-foreground">Sounds like: </p>
         <em className="text-s">
-          {phonemes.map((s: string, i: number) => {
-            return <Phoneme key={i} text={s}></Phoneme>;
-          })}
+          {phonemes.length ? (
+            phonemes.map((s: string, i: number) => {
+              return <Phoneme key={i} text={s}></Phoneme>;
+            })
+          ) : (
+            <WordSkeleton></WordSkeleton>
+          )}
         </em>
         {audio}
         <Accordion
@@ -203,12 +211,12 @@ function WordContext({ word }: { word: string }) {
               definitions: definitions,
             };
 
-            return <Meaning meaning={m} i={i}></Meaning>;
+            return <Meaning meaning={m} i={i} key={i}></Meaning>;
           })}
         </Accordion>
       </>
     );
   } else {
-    return <WordSkeleton word={word as string}></WordSkeleton>;
+    return <WordSkeleton></WordSkeleton>;
   }
 }

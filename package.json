@@ -7,7 +7,7 @@
     "dev": "next dev --turbo",
     "dev-no-turbo": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "HOST=noctua.io next start",
     "lint": "next lint",
     "postinstall": "patch-package"
   },

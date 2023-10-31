@@ -3,7 +3,6 @@ export const dynamic = "auto",
   revalidate = 0;
 
 import Pocketbase from "pocketbase";
-import { WordDefinition } from "@/components/word-definition";
 import WordDisplay, { WordSelect } from "@/components/word-select";
 import React from "react";
 

@@ -5,7 +5,7 @@
 
 import { marked } from "marked";
 import { sanitize } from "isomorphic-dompurify";
-import { SentenceTokenizer } from "natural/lib/natural/tokenizers/index.js";
+import { SentenceTokenizerNew } from "natural/lib/natural/tokenizers/index.js";
 import React from "react";
 import dynamic from "next/dynamic";
 // import Reader from "@/components/reader";
@@ -30,18 +30,36 @@ const Reader = dynamic(() => import("./reader"), { ssr: false });
 
 const renderer = {
   paragraph(text: string) {
-    const tk = new SentenceTokenizer();
+    const tk = new SentenceTokenizerNew();
     const res = tk.tokenize(text);
+
+    res.forEach((v, i, a) => {
+      if (v == `&#39;` || v == `&quot;`) {
+        a[i - 1] = a[i - 1].concat(v);
+        a[i] = "";
+      }
+    });
 
     return `<p>${res
       .map((s: string) => {
+        // if (s.match(/^['"]/g)) return `<span>'poo</span>`;
         return `<span>${s}</span>`;
       })
       .join(" ")}</p>`;
   },
   listitem(text: string, task: boolean, checked: boolean) {
-    const tk = new SentenceTokenizer();
+    const tk = new SentenceTokenizerNew();
     const res = tk.tokenize(text);
+
+    res.forEach((v, i, a) => {
+      if (v == `&#39;` || v == `&quot;`) {
+        a[i - 1] = a[i - 1].concat(v);
+        a[i] = "";
+      } else if (v.startsWith(`&#39; `)) {
+        a[i - 1] = a[i - 1].concat(`&#39;`);
+        a[i] = a[i].substring(2);
+      }
+    });
 
     return `<li>${res
       .map((s: string) => {
@@ -65,7 +83,8 @@ marked.use({
       return markdown;
     },
     postprocess(html) {
-      return sanitize(html);
+      // return sanitize(html);
+      return html;
     },
   },
   gfm: true,

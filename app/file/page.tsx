@@ -4,8 +4,9 @@ export const dynamic = "auto",
   fetchCache = "auto";
 
 import { FileUpload } from "@/components/file-upload";
-import { Separator } from "@/components/ui/separator";
-import { FileList } from "@/components/file-list";
+import dy from "next/dynamic";
+// import { FileList } from "@/components/file-list";
+const FileList = dy(() => import("@/components/file-list"), { ssr: false });
 
 export default function FilePage() {
   return (

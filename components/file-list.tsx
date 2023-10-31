@@ -28,7 +28,7 @@ async function getFiles() {
   return data;
 }
 
-export async function FileList() {
+export default async function FileList() {
   const data = await getFiles();
 
   return (

@@ -136,9 +136,9 @@ export default function Reader({ html }: { html: string }) {
 
   //Chromium MacOS has a bug where speechsynth spazzes out, works in firefox
   return (
-    <div className="flex flex-row space-x-4 p-4 justify-end h-auto">
+    <div className="flex flex-row space-x-4 p-4 justify-end h-auto min-w-[60%]">
       <article
-        className="prose dark:prose-invert "
+        className="prose prose-quoteless dark:prose-invert"
         onClick={(e) => {
           if ((e.target as HTMLElement).tagName != "SPAN") return false;
 

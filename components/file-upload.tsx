@@ -46,7 +46,6 @@ export function FileUpload({ ...props }) {
 
   const [title, setTitle] = useState("");
   const [classroom, setClassroom] = useState("");
-  const formData = new FormData();
 
   const cardFile = (file: any) => (
     <>
@@ -95,14 +94,20 @@ export function FileUpload({ ...props }) {
       </CardContent>
       <CardFooter>
         <form
-          onSubmit={async () => {
+          onSubmit={async (e) => {
+            e.preventDefault();
             // raw
-            formData.append("file", acceptedFiles[0]);
-            formData.append("title", title);
-            formData.append("class", classroom);
-            await pb.collection("files").create(formData);
+            try {
+              const formData = new FormData();
 
-            //ssml
+              formData.append("file", acceptedFiles[0]);
+              formData.append("title", title);
+              formData.append("class", classroom);
+              await pb.collection("files").create(formData);
+            } catch (err) {
+              //@ts-ignore
+              console.log(err.originalError);
+            }
           }}
         >
           <Input
