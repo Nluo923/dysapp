@@ -27,7 +27,7 @@ phonemeVowelConverter.set("AX", "ae"); // about  ->  uh bout
 phonemeVowelConverter.set("IX", "ih"); // rabbit  ->  rabb ih t
 phonemeVowelConverter.set("OW", "oh"); // boat  ->   b oh t
 phonemeVowelConverter.set("OY", "oy");
-phonemeVowelConverter.set("UH", "uu"); // book
+phonemeVowelConverter.set("UH", "ou"); // book
 phonemeVowelConverter.set("UX", "oo");
 
 phonemeVowelConverter.set("AA", "aa");
@@ -37,25 +37,92 @@ phonemeVowelConverter.set("AY", "ay");
 phonemeVowelConverter.set("EH", "eh");
 phonemeVowelConverter.set("EY", "ey");
 phonemeVowelConverter.set("IH", "ih");
-phonemeVowelConverter.set("UW", "uw");
+phonemeVowelConverter.set("UW", "oo");
+
+// merriam webster
+export const merriamPhoneticConverter = new Map<string, string>();
+
+merriamPhoneticConverter.set("a", "ah"); // bat  ->  ba ah t
+merriamPhoneticConverter.set("ə", "uh"),
+  /* butt, gut  ->  g uh t */ merriamPhoneticConverter.set("ᵊ", "uh"); // same schwa
+merriamPhoneticConverter.set("ȯ", "aoh"); //
+merriamPhoneticConverter.set("i", "ih"); // rabbit  ->  rabb ih t
+merriamPhoneticConverter.set("ō", "oh"); // boat  ->   b oh t
+merriamPhoneticConverter.set("ȯi", "oy");
+merriamPhoneticConverter.set("u̇", "ou"); // book
+// merriamPhoneticConverter.set("UX", "oo"); deprecated
+
+merriamPhoneticConverter.set("ä", "aa");
+merriamPhoneticConverter.set("au̇", "aw");
+merriamPhoneticConverter.set("ər", "er");
+merriamPhoneticConverter.set("ī", "ay");
+merriamPhoneticConverter.set("e", "eh");
+merriamPhoneticConverter.set("ā", "ey");
+merriamPhoneticConverter.set("i", "ih");
+merriamPhoneticConverter.set("ü", "oo");
+
+// not a vowel but eh
+merriamPhoneticConverter.set("ŋ", "ng");
+
+export function merriamConvert(wordI: string) {
+  let word = wordI
+    .replaceAll(/\//g, "")
+    .replaceAll("ː", "")
+    .replaceAll(" ͡", "")
+    .replaceAll("(", "")
+    .replaceAll(")", "")
+    .replaceAll("\u02cc", "")
+    .replaceAll("\u02c8", "")
+    .replaceAll("\u0252", "\u0251")
+    .replaceAll("\u035F", "")
+    .replaceAll("m̩", "m")
+    .replaceAll(".", "")
+    .replaceAll("-", "")
+    .replaceAll("÷", "")
+    .toLowerCase();
+
+  let outWord: string[] = [];
+
+  // try to find 2 long sequences first
+  for (let i = 0; i < word.length; i++) {
+    if (
+      i < word.length - 1 &&
+      merriamPhoneticConverter.get(word.substring(i, i + 2))
+    ) {
+      // abcdefg, replace cd for 72, abcdefg -> ad72efg
+      outWord.push(
+        merriamPhoneticConverter.get(word.substring(i, i + 2)) ??
+          word.substring(i, i + 2)
+      );
+      i++;
+    } else if (merriamPhoneticConverter.get(word.substring(i, i + 1))) {
+      outWord.push(
+        merriamPhoneticConverter.get(word.substring(i, i + 1)) ??
+          word.substring(i, i + 1)
+      );
+    } else {
+      outWord.push(word.substring(i, i + 1));
+    }
+  }
+
+  return outWord;
+}
 
 export const phonemeContextInfo = new Map<string, string>();
 // vowels
-phonemeContextInfo.set("ah", "middle of 'bAt'");
-phonemeContextInfo.set("uh", "middle of 'gUt''");
-phonemeContextInfo.set("aoh", "middle of 'bOt'");
-phonemeContextInfo.set("ae", "a in 'About'");
+phonemeContextInfo.set("ah", "as in 'bAt'");
+phonemeContextInfo.set("uh", "as in 'gUt''");
+phonemeContextInfo.set("aoh", "as in bOUGHt'");
 phonemeContextInfo.set("ih", "i in 'rabbIt'");
-phonemeContextInfo.set("oh", "middle of 'bOAt'");
+phonemeContextInfo.set("oh", "as in 'bOAt'");
 phonemeContextInfo.set("oy", "as in 'bOY'");
-phonemeContextInfo.set("uu", "middle of 'bOOk'");
+phonemeContextInfo.set("ou", "as in 'bOOk'");
 phonemeContextInfo.set("oo", "as in 'dUde'");
 
 phonemeContextInfo.set("aa", "a in 'pAlm'");
 phonemeContextInfo.set("aw", "first half of 'OUt'");
-phonemeContextInfo.set("er", "middle of 'bIRd'");
-phonemeContextInfo.set("ay", "middle of 'bIte'");
-phonemeContextInfo.set("eh", "middle of 'pEt'");
-phonemeContextInfo.set("ey", "middle of 'wAIt'");
-phonemeContextInfo.set("ih", "middle of 'bIt'");
-phonemeContextInfo.set("uw", "middle of 'bOOt'");
+phonemeContextInfo.set("er", "as in 'bIRd'");
+phonemeContextInfo.set("ay", "as in 'bIte'");
+phonemeContextInfo.set("eh", "as in 'pEt'");
+phonemeContextInfo.set("ey", "as in 'wAIt'");
+phonemeContextInfo.set("ih", "as in 'bIt'");

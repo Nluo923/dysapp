@@ -1,9 +1,12 @@
 "use client";
 
 import React, { DependencyList, EffectCallback } from "react";
-import { toArpabet } from "arpabet-and-ipa-convertor-ts";
 import { Skeleton } from "./ui/skeleton";
-import { phonemeVowelConverter, phonemeContextInfo } from "@/lib/phonemedata";
+import {
+  merriamPhoneticConverter,
+  phonemeContextInfo,
+  merriamConvert,
+} from "@/lib/phonemedata";
 import {
   Tooltip,
   TooltipContent,
@@ -89,7 +92,7 @@ function Meaning({ meaning, i }: { meaning: AMeaning; i: number }) {
 function WordContext({ word }: { word: string }) {
   const [loaded, setLoaded] = React.useState(false);
   const [phonetics, setPhonetics] = React.useState<string>("");
-  const [meanings, setMeanings] = React.useState<string[]>([]);
+  const [meanings, setMeanings] = React.useState<AMeaning>();
   const [phonemes, setPhonemes] = React.useState<string[]>([]);
   const [audioURL, setAudioURL] = React.useState("");
   const [errorMsg, setErrorMsg] = React.useState("");
@@ -99,53 +102,43 @@ function WordContext({ word }: { word: string }) {
       fetch(`/api/dictionary?word=${word}`)
         .then((res) => res.json())
         .then((res) => {
-          let phonetics;
-
-          setMeanings(res[0].meanings);
-          phonetics =
-            res[0].phonetic ??
-            res[0].phonetics ??
-            "Couldn't find a pronunciation";
-          setPhonemes(phonetics ? phonetics.split() : "");
-
-          if (res[0].phonetics && res[0].phonetics.length != 0) {
-            phonetics = res[0]?.phonetics[0].text;
-            for (let i = 0; res[0].phonetics[i]; i++) {
-              if (!res[0].phonetics[i].audio || res[0].phonetics[i].audio == "")
-                continue;
-
-              phonetics = res[0].phonetics[i].text;
-              setPhonemes(phonetics.split(" "));
-
-              setAudioURL(res[0].phonetics[i].audio);
-              if ((res[0].phonetics[i].audio as string).endsWith("-us.mp3")) {
-                break;
-              }
-            }
+          if (res.status == 404) {
+            return;
           }
 
-          // console.log(phonetics);
+          const word = res.res[0];
+          let phonetics = word.hwi.prs[0].mw;
+          setMeanings({
+            partOfSpeech: word.fl,
+            definitions: word.shortdef,
+          });
 
-          const stripped = phonetics
-            .replaceAll(/\//g, "")
-            .replaceAll("ː", "")
-            .replaceAll(" ͡", "")
-            .replaceAll("\u02cc", "")
-            .replaceAll("\u02c8", "")
-            .replaceAll("\u0252", "\u0251")
-            .replaceAll("m̩", "m")
-            .replaceAll(".", "");
+          const audio: string = word.hwi.prs[0].sound.audio;
+          // merriam weirdster
+          let subdir = audio.startsWith("bix")
+            ? "bix"
+            : audio.startsWith("gg")
+            ? "gg"
+            : audio.match(/^[\d_]/)
+            ? "number"
+            : audio.charAt(0);
+
+          setAudioURL(
+            `https://media.merriam-webster.com/audio/prons/en/us/mp3/${subdir}/${word.hwi.prs[0].sound.audio}.mp3`
+          );
 
           // console.log(stripped);
+          let phonemes = (word.hwi.hw as string).split("*");
+          try {
+            // phonemes = (toArpabet(stripped, 2) ?? stripped)
+            //   .replaceAll(/[0-9]/g, "")
+            //   .split(" ");
 
-          const phonemes = (toArpabet(stripped, 2) ?? stripped)
-            .replaceAll(/[0-9]/g, "")
-            .split(" ");
+            phonemes = merriamConvert(phonetics);
+          } catch (error) {
+            console.log(error);
+          }
 
-          for (let i = 0; i < phonemes.length; i++)
-            phonemes[i] =
-              phonemeVowelConverter.get(phonemes[i]) ??
-              phonemes[i].toLocaleLowerCase();
           // console.log(phonemes);
           setPhonetics(phonetics);
           setPhonemes(phonemes);
@@ -154,9 +147,7 @@ function WordContext({ word }: { word: string }) {
           // console.log(word + " passed");
           // setLoaded(true);
         })
-        .catch((error) => {
-          console.log(error);
-        }),
+        .catch((error) => {}),
     []
   );
 
@@ -201,18 +192,11 @@ function WordContext({ word }: { word: string }) {
           type="multiple"
           className="w-auto min-w-[80%] transition-all"
         >
-          {meanings.map((meaning: any, i: number) => {
-            let definitions: string[] = [];
-            meaning.definitions.forEach((d: any) =>
-              definitions.push(d.definition)
-            );
-            let m: AMeaning = {
-              partOfSpeech: meaning.partOfSpeech,
-              definitions: definitions,
-            };
-
-            return <Meaning meaning={m} i={i} key={i}></Meaning>;
-          })}
+          {meanings ? (
+            <Meaning meaning={meanings} i={0} key={0}></Meaning>
+          ) : (
+            <></>
+          )}
         </Accordion>
       </>
     );
