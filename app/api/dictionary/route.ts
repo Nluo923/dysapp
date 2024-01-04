@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const word = new URL(request.url).searchParams.get("word") ?? "apple";
+  let fallbackPhonetics = "";
   const res = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
   )

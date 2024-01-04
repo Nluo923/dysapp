@@ -46,27 +46,7 @@ export default function WordDisplay({ savedWords }: { savedWords: string[] }) {
               Here&apos;s generated text explaining the words in your library:{" "}
             </Label>
             <blockquote className="text-sm text-muted-foreground prose-invert">
-              In the intricate dance of life, the process of{" "}
-              <strong>photosynthesis</strong> unfolds within the chloroplasts of
-              plant cells, orchestrating the synthesis of{" "}
-              <strong>carbohydrates</strong> from sunlight, water, and carbon
-              dioxide. This remarkable biochemical ballet involves the{" "}
-              <strong>diffusion</strong> of <strong>elements</strong>, such as
-              carbon and oxygen, through the cellular membranes.{" "}
-              <strong>Photosynthesis</strong>, a pivotal{" "}
-              <strong>endothermic</strong> reaction, requires the energy
-              harnessed from sunlight to fuel the conversion of carbon dioxide
-              and water into glucose—a vital <strong>carbohydrate</strong>.{" "}
-              <strong>Enzymes</strong> act as molecular choreographers,
-              facilitating and accelerating these intricate biochemical
-              reactions. Amidst this symphony, <strong>fructose</strong>, a
-              simple sugar, emerges as one of the essential products, providing
-              sustenance for the <strong>organism</strong>. The beauty of this
-              metabolic masterpiece lies in the harmonious collaboration of{" "}
-              <strong>elements</strong>, the choreography of{" "}
-              <strong>enzymes</strong>, and the transformative power of{" "}
-              <strong>endothermic</strong> reactions, ultimately sustaining
-              life&apos;s delicate balance.
+              OpenAI key expired
             </blockquote>
           </div>
         </div>

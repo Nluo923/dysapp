@@ -45,3 +45,6 @@ nohup.out
 public/
 
 
+pb_data/data.db
+lib/API_KEY.ts
+nohup.out

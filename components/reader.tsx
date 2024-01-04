@@ -114,6 +114,7 @@ export default function Reader({ html }: { html: string }) {
 
   const sentenceUtterance = new SpeechSynthesisUtterance(sentence);
   {
+    sentenceUtterance.rate = 0.8;
     sentenceUtterance.onend = (e) => {
       setIsSpeaking(SpeakingState.DONE);
     };
